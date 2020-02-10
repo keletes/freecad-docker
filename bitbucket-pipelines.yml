@@ -8,7 +8,7 @@ pipelines:
           - docker
         script:
           - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-          - docker build -f freecad-image/Dockerfile -t keletes/freecad:latest .
+          - docker build -t keletes/freecad:latest .
           - docker push keletes/freecad:latest
         caches:
           - docker
