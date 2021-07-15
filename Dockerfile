@@ -11,6 +11,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt update && apt install -y software-properties-common
 RUN add-apt-repository ppa:freecad-maintainers/freecad-stable
 RUN apt update && apt -y install \
+python3-pyqt5 \
 freecad \
 xvfb
 
