@@ -1,0 +1,12 @@
+services:
+  freecad-builder:
+    build:
+      context: builder
+      dockerfile: './Dockerfile.Ubuntu'
+    volumes:
+      - '../FreeCAD/source:/source'
+      - './build:/builds'
+      - 'install:/install'
+
+volumes:
+  install:

@@ -1,0 +1,22 @@
+FROM ubuntu:rolling
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+ENV UTC=true
+ENV ARC=false
+ENV PACKAGE=freecad
+ENV MAINTAINER=Keletes
+ENV VERSION=1.0.0
+
+COPY ubuntu.sh /tmp
+
+RUN apt-get update && \
+    apt-get upgrade --yes && \
+    sh /tmp/ubuntu.sh && \
+    mkdir /builds
+
+COPY build.ubuntu.sh /tmp
+WORKDIR /builds
+
+VOLUME [ "/builds", "/source" ]
+CMD ["sh", "/tmp/build.ubuntu.sh"]
