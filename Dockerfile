@@ -1,20 +1,22 @@
-FROM ubuntu:23.10
+FROM ubuntu:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TZ=Europe/Berlin
+ARG FREECAD_VERSION=1.0.0
+ARG TARGETARCH
 
-ENV FREECAD_VERSION=freecad
-ENV FREECAD_PATH=/usr/lib/$FREECAD_VERSION/lib
+ENV FREECAD_PATH=/usr/lib
 
+RUN apt update && apt install -y curl xvfb
+RUN if [ "$TARGETARCH" = "amd64" ]; then curl -L https://github.com/FreeCAD/FreeCAD/releases/download/${FREECAD_VERSION}/FreeCAD_${FREECAD_VERSION}-conda-Linux-x86_64-py311.AppImage > FreeCAD.AppImage; fi
+RUN if [ "$TARGETARCH" = "arm64" ]; then curl -L https://github.com/FreeCAD/FreeCAD/releases/download/${FREECAD_VERSION}/FreeCAD_${FREECAD_VERSION}-conda-Linux-aarch64-py311.AppImage > FreeCAD.AppImage; fi
+RUN if [ "$TARGETARCH" = "aarch64" ]; then curl -L https://github.com/FreeCAD/FreeCAD/releases/download/${FREECAD_VERSION}/FreeCAD_${FREECAD_VERSION}-conda-Linux-aarch64-py311.AppImage > FreeCAD.AppImage; fi
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt update && apt install -y software-properties-common
-# RUN add-apt-repository ppa:freecad-maintainers/freecad-stable
-# RUN apt update
-RUN apt install -y xvfb
-RUN apt  install -y freecad
-
-# RUN ln -s /usr/lib/$FREECAD_VERSION/Mod /usr/lib/$FREECAD_VERSION-python3/Mod
-# RUN ln -s /usr/lib/$FREECAD_VERSION/Ext /usr/lib/$FREECAD_VERSION-python3/Ext
+RUN chmod a+x ./FreeCAD.AppImage
+RUN ./FreeCAD.AppImage --appimage-extract
+RUN rm -rf ./FreeCAD.AppImage
+RUN cp -r ./squashfs-root/usr /
+RUN rm -rf ./squashfs-root
 
 CMD ["xvfb-run", "freecad"]
