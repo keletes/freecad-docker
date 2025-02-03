@@ -3,9 +3,7 @@ name: Docker Image CI
 on:
   push:
     tags:
-      - v*
-  pull_request:
-    branches: [ "master" ]
+      - '*'
 
 jobs:
 
@@ -26,4 +24,4 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         push: ${{ github.event_name != 'pull_request' }}
-        tags: keletes/freecad:${{ github.ref_name }}
+        tags: keletes/freecad:${{ github.ref_name }} , keletes/freecad:latest
