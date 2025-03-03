@@ -1,4 +1,4 @@
-FROM ubuntu:lts
+FROM ubuntu:noble
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TZ=Europe/Berlin
