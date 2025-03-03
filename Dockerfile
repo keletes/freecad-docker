@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:lts
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TZ=Europe/Berlin
