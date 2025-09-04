@@ -17,7 +17,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN chmod a+x ./FreeCAD.AppImage
 RUN ./FreeCAD.AppImage --appimage-extract
 RUN rm -rf ./FreeCAD.AppImage
-RUN cp -r ./squashfs-root/usr /
+RUN rm -rf ./squashfs-root/usr/share/X11/xkb
+RUN cp -rf ./squashfs-root/usr /
 RUN rm -rf ./squashfs-root
 
 CMD ["xvfb-run", "freecad"]
