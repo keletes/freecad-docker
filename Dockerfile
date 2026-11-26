@@ -27,4 +27,12 @@ RUN set -e; \
     apt remove -y curl; \
     rm -rf /var/lib/apt/lists/*
 
+# Static FCStd checker (stdlib only): `import fcstd_check` from FreeCAD's Python, or
+# `fcstd-check <file>...` (JSON on stdout, exit 1 on findings). See README.
+COPY fcstd_check/fcstd_check.py /usr/local/lib/fcstd_check/fcstd_check.py
+COPY fcstd_check/fcstd-check /usr/local/bin/fcstd-check
+ENV PYTHONPATH=/usr/local/lib/fcstd_check${PYTHONPATH:+:$PYTHONPATH}
+# Fail the build if the wrapper cannot find a Python that runs the module.
+RUN fcstd-check /dev/null | grep -q "not a readable zip"
+
 CMD ["xvfb-run", "freecad"]
