@@ -29,10 +29,10 @@ RUN set -e; \
 
 # Static FCStd checker (stdlib only): `import fcstd_check` from FreeCAD's Python, or
 # `fcstd-check <file>...` (JSON on stdout, exit 1 on findings). See README.
-COPY fcstd_check/fcstd_check.py /usr/local/lib/fcstd_check/fcstd_check.py
+COPY fcstd_check/fcstd_check.py /usr/lib/python3.11/site-packages/fcstd_check.py
 COPY fcstd_check/fcstd-check /usr/local/bin/fcstd-check
-ENV PYTHONPATH=/usr/local/lib/fcstd_check${PYTHONPATH:+:$PYTHONPATH}
-# Fail the build if the wrapper cannot find a Python that runs the module.
-RUN fcstd-check /dev/null | grep -q "not a readable zip"
+# Fail the build if the wrapper or FreeCAD's own Python cannot run the module.
+RUN fcstd-check /dev/null | grep -q "not a readable zip" \
+    && freecadcmd -c "import sys, fcstd_check; sys.__stdout__.write('FCSTD_IMPORT_OK\\n')" 2>&1 | grep -q FCSTD_IMPORT_OK
 
 CMD ["xvfb-run", "freecad"]

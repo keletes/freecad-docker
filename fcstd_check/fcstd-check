@@ -1,8 +1,8 @@
 #!/bin/sh
 # Run the FCStd checker with the image's FreeCAD Python: fcstd-check <file>...
 # Exit code 0: no violations, 1: violations (JSON on stdout).
-for py in /usr/bin/python3 /usr/bin/python3.11 /usr/bin/python; do
-  [ -x "$py" ] && exec "$py" -I -c 'import sys; sys.path.insert(0, "/usr/local/lib/fcstd_check"); import fcstd_check; sys.exit(fcstd_check.main(sys.argv[1:]))' "$@"
+for py in /usr/bin/python /usr/bin/python3 /usr/bin/python3.11; do
+  [ -x "$py" ] && exec "$py" -I -c 'import sys; import fcstd_check; sys.exit(fcstd_check.main(sys.argv[1:]))' "$@"
 done
 echo "fcstd-check: no python interpreter found" >&2
 exit 2
